@@ -5,6 +5,7 @@ import url from "whatwg-url";
 import buffer from "buffer";
 import crypto from "crypto";
 import { genId } from "./util.js";
+import { torrentSize } from "./torrent-parser.js";
 
 const Buffer = buffer.Buffer;
 const parseUrl = url.parseURL;
@@ -77,6 +78,12 @@ function buildAnnounceReq(connectionId, torrent, port = 6881) {
   genId().copy(buf, 36);
 
   Buffer.alloc(8).copy(buf, 56);
+  buf.writeInt;
+  buf.writeInt32BE(torrentSize(torrent), 64);
+  // console.log(buf);
+
+  // pr
+  //torrentSize(torrent).copy(buf, 64);
   // left is size basically
   Buffer.alloc(8).copy(buf, 72);
 

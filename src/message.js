@@ -9,41 +9,66 @@ const Buffer = buffer.Buffer;
 export function buildHandshake(torrent) {
   const buf = Buffer.alloc(68);
 
+  // protocol string length, 19 huruf
   buf.writeUInt8(19, 0);
 
+  // protocol string
   buf.write("BitTorrent protocol", 1);
 
+  // 8 reserved bytes
+  // why can't we do this?
+  // buf.writeBigUInt64BEI(0, 20)
   buf.writeUInt32BE(0, 20);
   buf.writeUInt32BE(0, 24);
 
+  // info hash
   infoHash(torrent).copy(buf, 28);
 
+  // 20 byte string used as unique id for the client
+  // why do we generate it again?
   buf.write(genId());
+
   return buf;
 }
 
+// https://wiki.theory.org/BitTorrentSpecification#Messages
+// <length-prefix><message_id><payload>
+// length Big Endian, msg Id single decimal byte, payload msg dependent
+
+// <len=0000>
 export function buildKeepAlive() {
   Buffer.alloc(4);
 }
 
+// <len=0001> <id=0>
+export function buildChoke() {
+  const buf = Buffer.alloc(5);
+
+  buf.writeUInt32BE(1, 0);
+  buf.writeUint8(0, 4);
+}
+
+// <len=0001> <id=1>
 export function buildUnchoke() {
   const buf = Buffer.alloc(5);
-  // length
+
   buf.writeUInt32BE(1, 0);
-  // id
   buf.writeUInt8(1, 4);
+
   return buf;
 }
 
+// <len=0001> <id=2>
 export function buildInterested() {
   const buf = Buffer.alloc(5);
-  // length
+
   buf.writeUInt32BE(1, 0);
-  // id
   buf.writeUInt8(2, 4);
+
   return buf;
 }
 
+// <len=0001> <id=3>
 export function buildUninterested() {
   const buf = Buffer.alloc(5);
   // length
@@ -53,25 +78,30 @@ export function buildUninterested() {
   return buf;
 }
 
+// <len=0005> <id=4> <piece index>
 export function buildHave(payload) {
   const buf = Buffer.alloc(9);
-  // length
+
   buf.writeUInt32BE(5, 0);
-  // id
   buf.writeUInt8(4, 4);
-  // piece index
   buf.writeUInt32BE(payload, 5);
+
+  console.log("payload length :", payload.length);
+  console.log("index length :", payload.index.length);
+  console.log("begin length :", payload.begin.length);
+  console.log("block length :", payload.block.length);
+
   return buf;
 }
 
+// <len=0001+x> <id=5> <bitfield>
 export function buildBitfield(bitfield) {
   const buf = Buffer.alloc(14);
-  // length
+
   buf.writeUInt32BE(payload.length + 1, 0);
-  // id
   buf.writeUInt8(5, 4);
-  // bitfield
   bitfield.copy(buf, 5);
+
   return buf;
 }
 
@@ -127,7 +157,7 @@ export function buildPort(payload) {
   // id
   buf.writeUInt8(9, 4);
   // listen-port
-  buf.writeUInt16BE(payload, 5);
+  buf.writeUInt16BE(payload, 5); // pass the first 16bits in the payload??
   return buf;
 }
 

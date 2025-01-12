@@ -60,12 +60,3 @@ function isHandshake(msg) {
     msg.toString("utf8", 1) === "BitTorrent protocol"
   );
 }
-
-function haveHandler(payload, socket, requested) {
-  // ...
-  const pieceIndex = payload.readUInt32BE(0);
-  if (!requested[pieceIndex]) {
-    socket.write(message.buildRequest(...));
-  }
-  requested[pieceIndex] = true;
-}

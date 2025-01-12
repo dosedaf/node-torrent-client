@@ -14,6 +14,10 @@ export function torrentOpen(filepath) {
 }
 
 export function torrentSize(torrent) {
+  console.log("torrent info files :  ", torrent.info.files);
+  console.log(
+    torrent.info.files.map((file) => file.length).reduce((a, b) => a + b),
+  );
   const size = torrent.info.files
     ? torrent.info.files.map((file) => file.length).reduce((a, b) => a + b)
     : torrent.info.length;

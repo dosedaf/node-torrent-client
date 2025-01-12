@@ -12,9 +12,6 @@
 	"description": "",
 	"dependencies": {
 		"bencode": "^4.0.0",
-		"parse-torrent": "^11.0.18",
-		"raw-socket": "^1.8.1",
-		"torrent-parser": "^1.2.0",
 		"whatwg-url": "^14.1.0"
 	}
 }

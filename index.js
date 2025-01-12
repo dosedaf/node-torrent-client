@@ -1,18 +1,15 @@
 "use strict";
 
-import { getPeers } from "./tracker.js";
-import { torrentOpen } from "./torrent-parser.js";
+import { getPeers } from "./src/tracker.js";
+import { torrentOpen } from "./src/torrent-parser.js";
+import { download } from "./src/download.js";
 
 const torrent = torrentOpen("flow");
-
-/*
-const torrent = bencode.decode(
-  fs.readFileSync("Wicked (2024) [1080p] [WEBRip] [5.1] [YTS.MX].torrent"),
-  "utf8",
-);
-*/
+//const torrent = torrentOpen(process.argv[2]);
 
 getPeers(torrent, (peers) => {
   console.log(torrent);
   console.log("peers: ", peers);
 });
+
+download(torrent);

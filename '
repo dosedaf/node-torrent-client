@@ -1,0 +1,45 @@
+"use strict";
+
+import buffer from "buffer";
+import { infoHash } from "./torrent-parser.js";
+import { genId } from "../util.js";
+
+const Buffer = buffer.Buffer;
+
+export function buildHandshake(torrent) {
+  const buf = Buffer.alloc(68);
+
+  buf.writeUInt8(19, 0);
+
+  buf.write("BitTorrent protocol", 1);
+
+  buf.writeUInt32BE(0, 20);
+  buf.writeUInt32BE(0, 24);
+
+  infoHash(torrent).copy(buf, 28);
+
+  buf.write(genId());
+  return buf;
+}
+
+export function buildKeepAlive() {
+  Buffer.alloc(4);
+}
+
+export function buildUnchoke() {}
+
+export function buildInterested() {}
+
+export function buildUninterested() {}
+
+export function buildHave(payload) {}
+
+export function buildBitfield(bitfield) {}
+
+export function buildRequest(payload) {}
+
+export function buildPiece(payload) {}
+
+export function buildCancel(payload) {}
+
+export function buildCancel(payload) {}

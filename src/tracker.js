@@ -4,7 +4,7 @@ import dgram from "dgram";
 import url from "whatwg-url";
 import buffer from "buffer";
 import crypto from "crypto";
-import { genId } from "./util.js";
+import { genId } from "../util.js";
 import { torrentSize } from "./torrent-parser.js";
 
 const Buffer = buffer.Buffer;
